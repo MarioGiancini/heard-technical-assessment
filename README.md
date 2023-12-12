@@ -1,13 +1,11 @@
 # Heard Take Home Assessment
 
 ## About Heard
----
 [Heard](https://www.joinheard.com/) is an all-in-one financial solution for therapists that combines software and human support to handle bookkeeping, taxes, payroll, and more. Our mission is to help therapists be therapists by acting as their financial back office to empower therapists to spend less time running their business and more time giving clients the help and support they need through an affordable, easy-to-use software tool with real-time human support.
 
 Heard is growing rapidly, and could use your expertise to help us become an industry-leading software services provider for independent mental health practitioners!
 
 ## About the Take Home
----
 Welcome to the first stage of our technical interview process! As part of your application, we invite you to complete a take-home software assessment. This assessment is designed to showcase your coding abilities and understanding of web application development.
 
 The task is to build a simple CRUD (Create, Retrieve, Update, Delete) web application consisting of a frontend with which a user can interact, a backend, and a datastore of your choice. This app will be used to interact with transaction data. 
@@ -34,7 +32,6 @@ Submission
 Once you have completed the assessment, please provide the URL to your Git repository. Ensure that your repository is public or that access is granted to [@dperconti](https://github.com/dperconti).
 
 ## Financial Transaction Data App
----
 
 Each transaction must include the following attributes:
 - `transactionId`: A unique identifier for the transaction (string).
@@ -71,7 +68,6 @@ Full data example is available [HERE](./data/transactions.json).
 ```
 
 ## Other Considerations
----
 
 > **❗** Note: These aren't all the technologies that we use at Heard, but most are relevant to our tech stack. 
 
@@ -106,13 +102,11 @@ Full data example is available [HERE](./data/transactions.json).
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
 
 ## Example
----
 
 Below is an example of what your application _could_ look like. 
 
 **List Transactions**
 ![Example dashboard for listing transaction data](./assets/List%20Transactions.png "Example dashboard for listing transaction data")
-
 
 **Create Transaction**
 ![Example dashboard for creating a transaction](./assets/Create%20Transaction.png "Example dashboard for creating a transaction")
