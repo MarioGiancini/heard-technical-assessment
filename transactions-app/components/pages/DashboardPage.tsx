@@ -90,7 +90,7 @@ export function DashboardPage({ transactions }: DashboardPageProps) {
     {
       name: 'Average Transaction',
       value: `$${(averageAmount / 100).toFixed(2)}`,
-      change: current.length === 0 ? '0%' : 
+      change: current.length === 0 || previous.length === 0 ? '0%' : 
         `${((averageAmount - (previous.reduce((sum, t) => sum + t.amount, 0) / (previous.length || 1))) / (previous.reduce((sum, t) => sum + t.amount, 0) / (previous.length || 1)) * 100).toFixed(2)}%`,
       changeType: averageAmount >= (previous.reduce((sum, t) => sum + t.amount, 0) / (previous.length || 1)) ? 'positive' : 'negative'
     },
