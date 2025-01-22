@@ -13,14 +13,33 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+model Account {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  fromTransactions Transaction[] @relation("FromAccount")
+  toTransactions   Transaction[] @relation("ToAccount")
+}
+
 model Transaction {
   id              String   @id @default(cuid())
   title           String
-  description     String
-  amount          Int
-  fromAccount     String
-  toAccount       String
+  description     String?
+  amount          Int // Stored in cents
   transactionDate DateTime
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  // Relationships
+  fromAccount   Account @relation("FromAccount", fields: [fromAccountId], references: [id])
+  fromAccountId String
+  toAccount     Account @relation("ToAccount", fields: [toAccountId], references: [id])
+  toAccountId   String
+
+  // Add indexes for better performance
+  @@index([fromAccountId])
+  @@index([toAccountId])
 }
