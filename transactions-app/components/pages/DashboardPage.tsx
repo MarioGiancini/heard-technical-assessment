@@ -79,7 +79,7 @@ export function DashboardPage({ transactions }: DashboardPageProps) {
 
   const stats = [
     {
-      name: 'Total Transactions',
+      name: 'Transactions',
       value: current.length.toString(),
       change: `${((current.length - previous.length) / (previous.length || 1) * 100).toFixed(2)}%`,
       changeType: current.length >= previous.length ? 'positive' : 'negative'
@@ -131,7 +131,7 @@ export function DashboardPage({ transactions }: DashboardPageProps) {
             <Button
               variant="primary"
               size="sm"
-              className="ml-auto flex items-center gap-x-1"
+              className="ml-auto flex items-center gap-x-1 font-semibold"
               onClick={() => router.push('/transactions')}
             >
               View transactions

@@ -158,7 +158,9 @@ export default function Table({ transactions, accounts, onUpdate }: TableProps) 
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
             <Button
               variant="primary"
-              onClick={() => setEditingTransaction(null)}
+              onClick={() => {
+                setEditingTransaction({} as TransactionWithAccounts)
+              }}
             >
               Add transaction
             </Button>
