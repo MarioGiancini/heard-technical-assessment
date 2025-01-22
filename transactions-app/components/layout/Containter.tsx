@@ -9,6 +9,7 @@ import {
   ChartPieIcon,
   CurrencyDollarIcon,
   HomeIcon,
+  BanknotesIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { classNames } from '@/lib/utils'
@@ -18,6 +19,7 @@ import Link from 'next/link'
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
   { name: 'Transactions', href: '/transactions', icon: CurrencyDollarIcon },
+  { name: 'Accounts', href: '/accounts', icon: BanknotesIcon },
   { name: 'Calendar', href: '/calendar', icon: CalendarIcon },
   { name: 'Reports', href: '#', icon: ChartPieIcon },
 ]

@@ -1,17 +1,24 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import { Button } from './Button'
 import { Toast } from './Toast'
 import type { Transaction } from '@prisma/client'
+import { Select } from './Select'
+
+interface TransactionWithAccounts extends Transaction {
+  fromAccount: { id: string; name: string }
+  toAccount: { id: string; name: string }
+}
 
 interface TransactionDialogProps {
   isOpen: boolean
   onClose: () => void
   onSubmit: (data: Partial<Transaction>) => Promise<void>
-  transaction?: Transaction
+  transaction?: TransactionWithAccounts
   title: string
+  accounts: { id: string; name: string }[]
 }
 
 export function TransactionDialog({ 
@@ -19,7 +26,8 @@ export function TransactionDialog({
   onClose, 
   onSubmit, 
   transaction, 
-  title 
+  title,
+  accounts 
 }: TransactionDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
@@ -27,18 +35,47 @@ export function TransactionDialog({
     message: '',
     type: 'success'
   })
+  const [selectedFromAccount, setSelectedFromAccount] = useState<{ id: string; name: string } | null>(
+    transaction?.fromAccount ? {
+      id: transaction.fromAccount.id,
+      name: transaction.fromAccount.name
+    } : null
+  )
+  const [selectedToAccount, setSelectedToAccount] = useState<{ id: string; name: string } | null>(
+    transaction?.toAccount ? {
+      id: transaction.toAccount.id,
+      name: transaction.toAccount.name
+    } : null
+  )
+
+  // Reset selected accounts when transaction changes
+  useEffect(() => {
+    setSelectedFromAccount(transaction?.fromAccount ? {
+      id: transaction.fromAccount.id,
+      name: transaction.fromAccount.name
+    } : null)
+    setSelectedToAccount(transaction?.toAccount ? {
+      id: transaction.toAccount.id,
+      name: transaction.toAccount.name
+    } : null)
+  }, [transaction])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
     try {
       const formData = new FormData(e.currentTarget)
+      
+      if (!selectedFromAccount?.id || !selectedToAccount?.id) {
+        throw new Error('Please select both accounts')
+      }
+
       const data = {
         title: formData.get('title') as string,
         description: formData.get('description') as string,
         amount: Math.round(parseFloat(formData.get('amount') as string) * 100),
-        fromAccount: formData.get('fromAccount') as string,
-        toAccount: formData.get('toAccount') as string,
+        fromAccountId: selectedFromAccount.id,
+        toAccountId: selectedToAccount.id,
         transactionDate: new Date(formData.get('transactionDate') as string),
       }
       await onSubmit(data)
@@ -160,30 +197,26 @@ export function TransactionDialog({
                     </div>
 
                     <div>
-                      <label htmlFor="fromAccount" className="block text-sm font-medium text-gray-700">
-                        From Account
-                      </label>
-                      <input
-                        type="text"
-                        name="fromAccount"
-                        id="fromAccount"
-                        defaultValue={transaction?.fromAccount}
+                      <Select
+                        label="From Account"
+                        value={selectedFromAccount}
+                        onChange={setSelectedFromAccount}
+                        options={accounts.filter(account => account.id !== selectedToAccount?.id)}
+                        placeholder="Select account"
                         required
-                        className="mt-1.5 block w-full rounded-md bg-white px-3 py-2 text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                        name="fromAccount"
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="toAccount" className="block text-sm font-medium text-gray-700">
-                        To Account
-                      </label>
-                      <input
-                        type="text"
-                        name="toAccount"
-                        id="toAccount"
-                        defaultValue={transaction?.toAccount}
+                      <Select
+                        label="To Account"
+                        value={selectedToAccount}
+                        onChange={setSelectedToAccount}
+                        options={accounts.filter(account => account.id !== selectedFromAccount?.id)}
+                        placeholder="Select account"
                         required
-                        className="mt-1.5 block w-full rounded-md bg-white px-3 py-2 text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                        name="toAccount"
                       />
                     </div>
 

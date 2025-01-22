@@ -12,6 +12,10 @@ export async function GET(
     const transaction = await prisma.transaction.findUnique({
       where: {
         id
+      },
+      include: {
+        fromAccount: true,
+        toAccount: true,
       }
     })
     if (!transaction) {
@@ -31,26 +35,23 @@ export async function PUT(
 ) {
   const { id } = await params
   try {
-    // First check if transaction exists
-    const existingTransaction = await prisma.transaction.findUnique({
-      where: {
-        id,
-      }
-    })
-
-    // throw a test error
-    // throw new Error('Test error')
-
-    if (!existingTransaction) {
-      return NextResponse.json({ error: 'Transaction not found' }, { status: 404 })
-    }
-
     const json = await request.json()
     const transaction = await prisma.transaction.update({
       where: {
         id
       },
-      data: json
+      data: {
+        title: json.title,
+        description: json.description,
+        amount: json.amount,
+        transactionDate: json.transactionDate,
+        fromAccountId: json.fromAccountId,
+        toAccountId: json.toAccountId,
+      },
+      include: {
+        fromAccount: true,
+        toAccount: true,
+      }
     })
     return NextResponse.json(transaction)
   } catch (error) {
@@ -67,17 +68,6 @@ export async function DELETE(
 ) {
   const { id } = await params
   try {
-    // First check if transaction exists
-    const existingTransaction = await prisma.transaction.findUnique({
-      where: {
-        id
-      }
-    })
-
-    if (!existingTransaction) {
-      return NextResponse.json({ error: 'Transaction not found' }, { status: 404 })
-    }
-
     await prisma.transaction.delete({
       where: {
         id
