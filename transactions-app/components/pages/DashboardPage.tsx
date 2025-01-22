@@ -5,6 +5,7 @@ import { classNames } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import type { Transaction } from '@prisma/client'
 import { startOfDay, subDays, isAfter } from 'date-fns'
+import { useRouter } from 'next/navigation'
 
 const timeRanges = [
   { name: 'Last 7 days', value: '7d' },
@@ -20,6 +21,8 @@ interface DashboardPageProps {
 
 export function DashboardPage({ transactions }: DashboardPageProps) {
   const [selectedRange, setSelectedRange] = useState<TimeRange>('all')
+
+  const router = useRouter()
 
   const getFilteredTransactions = (days?: number) => {
     if (!days) return transactions
@@ -129,8 +132,9 @@ export function DashboardPage({ transactions }: DashboardPageProps) {
               variant="primary"
               size="sm"
               className="ml-auto flex items-center gap-x-1"
+              onClick={() => router.push('/transactions')}
             >
-              New transaction
+              View transactions
             </Button>
           </div>
         </header>
